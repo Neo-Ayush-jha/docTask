@@ -1,0 +1,71 @@
+{% extends 'Doctor/doctorBase.html' %}
+ {% load static %} {% block content %}
+<div class="container mt-5">
+    <div class="row">
+        
+        <div class="col-xl-9 col-sm-12 mx-auto">
+            <div class="row mx-auto">
+                <div class="card mb-3">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <img src="{{post.block_image.url}}" style="height: 350px; width: 360px"
+                                class="img-fluid rounded-start" alt="..." />
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                               
+                                <p class="card-text fs-5">
+                                    <span class="fw-bold">Title : </span> {{post.title}}
+                                </p>
+                                <p class="card-text fs-5"><span class="fw-bold">Summary :</span>{{post.summary}}</p>
+                                <p class="card-text fs-5"><span class="fw-bold">Content :</span>{{post.content}}</p>
+                                <p class="card-text">
+                                    <small class="text-muted"><span class="fw-bold">Author : </span>
+                                        {{post.doctor}}</small>
+                                </p>
+                                <div class="card-footer">
+                                    {% if post.isAvailable == False %}
+                                    <a href="{%url 'approveBlock' post.id%}" class="btn btn-danger">Approve</a></div>
+                                    {% else %}
+                                    <p class="btn btn-success">Approve</p></div>
+                                    {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12 col-sm-12 mx-auto">
+            <h1 class="bg-info disply-3 text-success text-center fst-italic">
+                Related posts
+            </h1>
+            <div class="row mx-auto">
+                {% for blo in related_post %}
+                <div class="col-xl-4 col-sm-4 mx-auto">
+                    <a href="{%url 'singleBlock' blo.id%}" class="btn">
+                        <div class="card">
+                            <div class="card">
+                                <img src="{{blo.block_image.url}}" class="card-img-top" height="250px" alt="..." />
+                                <div class="card-body">
+                                    <h5 class="card-title">{{blo.title|truncatechars:20}}</h5>
+                                    <p class="card-text">{{blo.content|truncatechars:80}}</p>
+                                    <div class="card-footer bg-transparent border-success">
+                                        <p class="card-text text-muted my-0">
+                                            <span class="fw-bold">Doctor:</span>
+                                            {{blo.doctor.username}}
+                                        </p>
+                                        <p class="card-text text-muted my-0">
+                                            <span class="fw-bolder">Category:</span><span>{{blo.category}}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
