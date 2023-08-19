@@ -3,10 +3,10 @@
         <div class="row">
             <h1 class="display-3 text-center">Create an account as {{user_type}}'s</h1>
             <div class="col-8 mx-auto">
-                <form action="" method="post" enctype="multipart/form-data">
-                    {%csrf_token%}
-                    {{form|crispy}}
-                    <input type="submit" value="Register" class="btn btn-success">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-info w-50">Create Category Post</button>
                 </form>
             </div>
         </div>

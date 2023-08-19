@@ -1,0 +1,9 @@
+<ul>
+    {% for post in posts %}
+    <li>
+        <h2>{{ post.title }}</h2>
+        <img src="{{ post.image.url }}" alt="{{ post.title }}">
+        <p>{{ post.truncated_summary }}</p>
+    </li>
+    {% endfor %}
+</ul>

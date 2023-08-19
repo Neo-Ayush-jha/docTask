@@ -13,8 +13,12 @@
                     <td colspan="2" class="text-center pe-5" rowspan="5"><img src="{{user.profile_Picture.url}}" width="400px" height="400px" alt=""></td>
                 </tr>
                 <tr class="fs-4">
-                    <th>Full name :- </th>
-                    <td>{{user.first_name}} {{user.last_name}}</td>
+                    <th>First name :- </th>
+                    <td>{{user.first_name}}</td>
+                </tr>
+                <tr class="fs-4">
+                    <th>Last name :- </th>
+                    <td>{{user.last_name}}</td>
                 </tr>
                 <tr class="fs-4">
                     <th>Email :- </th>
@@ -30,6 +34,47 @@
             {% endif %}
         </div>
     </div>
-   
+    <div class="row mt-5">
+        <div class="h1 text-center bg-info">Post Block</div>
+        <div class="col-xl-2 col-sm-6 ">
+            <div class="d-xl-block ">
+                <ul class="list-group">
+                    <li class="list-group-item active bg-warning text-dark w-full" aria-current="true"><a href="{%url 'DoctorHomeView'  %}" class="card-link text-dark">Categories</a></li>
+                    {% for cat in category %}
+                    <li class="list-group-item"><a href="{%url 'filter' cat.id %}" class="card-link text-dark"> {{cat.cat_title}}</a></li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+        <div class="col-xl-10 col-sm-12 mx-auto">
+            <div class="row">
+                
+                
+                {% for blo in postBlock %}
+                {% if blo.doctor == user %}
+                    
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card">
+                            <img src="{{blo.block_image.url}}" class="card-img-top" height="250px" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{blo.title|truncatechars:20}}</h5>
+                                <p class="card-text">{{blo.content|truncatechars:80}}</p>
+                                <div class="card-footer bg-transparent border-success">
+                                    <p class="card-text text-muted my-0"><span class="fw-bold">Doctor:</span>
+                                        {{blo.doctor.username}}</p>
+                                        <p class="card-text text-muted my-0">   <span class="fw-bolder ">Category:</span><span>{{blo.category}}</span></p>
+                                    </div>
+                                    <a href="{%url 'singleBlock' blo.id %}" class="btn btn-primary">Go check</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+            {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}

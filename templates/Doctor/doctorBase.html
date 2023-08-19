@@ -14,13 +14,17 @@
     
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a href="{% url 'dasboard' %}" class="navbar-brand">Task</a>
+            <a href="{% url 'home' %}" class="navbar-brand">Task D</a>
             <ul class="navbar-nav">
-                <li class="nav-item"><a href="{% url 'dasboard' %}" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="{% url 'DoctorHomeView' %}" class="nav-link">Home</a></li>
                {% if user.is_authenticated %}
                  <li class="nav-item"><a href="{% url 'logout'%}" class="nav-link">Logout</a></li>
+                 <li class="nav-item"><a href="{% url 'blockCreate'%}" class="nav-link">Block</a></li>
                  <li class="nav-item"><a href="{% url 'DoctorDashbordView'%}" class="nav-link">Dasboard</a></li>
                {% else %}
+               {% if user.is_doctor == True  %}
+               <li class="nav-item"><a href="{% url 'blockCreate'%}" class="nav-link">Create bloge</a></li>
+               {% endif %}
                <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-light btn " href="#" role="button" data-bs-toggle="dropdown"
                   aria-expanded="false" style="background-color: #17b82a;font-family: Handlee, cursive">

@@ -1,16 +1,23 @@
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render,redirect,HttpResponse,get_object_or_404
 from .models import *
 from .forms import *
 from django.contrib.auth import login , authenticate,logout
 from django.views.generic import CreateView,View,FormView
 from django.contrib.auth.forms import AuthenticationForm
 from .decorators import *
-
+from django.views.generic import CreateView,View,FormView
+from django.contrib.auth.forms import AuthenticationForm
+from .decorators import *
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 class HomeView(View):
     def get(self,req):
-        
-        return render(req,"home.html")
+        data={
+            "postBlock":BlogPost.objects.filter(is_draft=True),
+            "category":Category.objects.all(),
+        }
+        return render(req,"home.html",data)
 class DashbordView(View):
     def get(self,req):
         data={
@@ -68,3 +75,68 @@ class LogoutView(View):
     def get(self,req):
         logout(req)
         return redirect("login")
+    
+class DoctorHomeView(View):
+    def get(self,req):
+        data={
+            # "postBlock":BlogPost.objects.filter(is_draft=True),
+            "postBlock":BlogPost.objects.all(),
+            "category":Category.objects.all(),
+        }
+        return render(req,"Doctor/DoctorHome.html",data)
+@login_required
+@doctor_required
+def categoryView(req):
+    form= CategoryForm(req.POST)
+    user_type="Doctor"
+    if req.method =="POST":
+        if form.is_valid():
+            form.save()
+            return redirect(create_blog_post)
+    return render(req,"Form/cat.html",{"form":form,"user_type":user_type})
+@login_required
+@doctor_required
+def create_blog_post(request):
+    user_type="Doctor"
+    if request.method == 'POST':
+        form = BlogPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('DoctorHomeView')
+    else:
+        form = BlogPostForm()
+    return render(request, 'Form/create_blog_post.html', {'form': form,"user_type":user_type})
+
+def patient_blog_list(request):
+    posts = BlogPost.objects.filter(is_draft=False)
+    return render(request, 'patient_blog_list.html', {'posts': posts})
+
+
+@login_required
+@doctor_required
+def singleBlock(req,id):
+    singlePost=get_object_or_404(BlogPost,pk=id)
+    
+    data={
+        "category":Category.objects.all(),
+        "post":singlePost,
+        "related_post":BlogPost.objects.filter(~Q(pk=id) & Q(category__id=singlePost.category.id) & Q(is_draft=True))
+    }
+    return render(req,"Doctor/singleBlock.html",data)
+
+@login_required
+def filterBlock(req,cat_id):
+    
+    data = {
+        "category": Category.objects.all(),
+        "postBlock": BlogPost.objects.filter(category__id=cat_id)
+    }
+    return render(req, "home.html", data)
+
+@login_required
+@doctor_required
+def approveBlock(req,id):
+    single=BlogPost.objects.get(id=id,is_draft=False)
+    single.is_draft=True
+    single.save()
+    return redirect(singleBlock,id)

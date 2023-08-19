@@ -6,15 +6,42 @@
         <div class="row">
             
             <div class="row mt-3">
+                <div class="col-xl-2 col-sm-6 ">
+                    <div class="d-xl-block ">
+                        <ul class="list-group">
+                            <li class="list-group-item active bg-warning text-dark w-full" aria-current="true">Categories</li>
+                            {% for cat in category %}
+                            <li class="list-group-item"><a href="{% url 'filter' cat.id %}" class="card-link text-dark"> {{cat.name}}</a></li>
+                            {% endfor %}
+        
+                        </ul>
+                    </div>
+                </div>
                 <div class="col-xl-10 col-sm-12 mx-auto">
                     <div class="row">
-                    <div class="col text-center">
+                        {% for blo in postBlock %}
+                    <div class="col-4">
                         <div class="card">
                             <div class="card">
-                               <h1 class="display-1">Welcom to Task page.</h1>
+                                <img src="{{blo.image.url}}" class="card-img-top" height="250px" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title my-0"><span class="fw-bold">Title :</span>{{blo.title|truncatechars:15}}</h5>
+                                    <p class="card-text my-0"><span class="fw-bold">Content :</span>{{blo.content|truncatechars:15}}</p>
+                                    <p class="card-text my-0"><span class="fw-bold">Summary :</span>{{blo.summary|truncatechars:15}}</p>
+                                    <div class="card-footer bg-transparent border-success">
+                                        <p class="card-text text-muted my-0"><span class="fw-bold">Doctor:</span>
+                                            {{blo.doctor.username}}</p>
+                                        <p class="card-text text-muted my-0">   <span class="fw-bolder ">Category:</span><span>{{blo.category}}</span></p>
+                                    </div>
+                                    <a href="{%url 'singleBlock' blo.id %}" class="btn btn-primary">Go check</a>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {% empty %}
+
+                    <h1 class="fw-bold display-1 text-muted">Empty post</h2>
+                    {% endfor %}
                     </div>
                 </div>
             </div>
