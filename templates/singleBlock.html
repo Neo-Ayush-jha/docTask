@@ -31,13 +31,6 @@
                                 </p>
                                 <p class="card-text fs-5"><span class="fw-bold">Summary :</span>{{post.summary}}</p>
                                 <p class="card-text fs-5"><span class="fw-bold">Content :</span>{{post.content}}</p>
-                                
-                                <div class="card-footer">
-                                    {% if post.is_draft == False %}
-                                        <a href="{%url 'is_draft' post.id%}" class="btn btn-danger">Id not draft</a>
-                                    {% else %}
-                                        <p class="btn btn-success">Is draft</p></div>
-                                    {% endif %}
                             </div>
                         </div>
                     </div>

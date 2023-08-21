@@ -14,7 +14,7 @@ from django.db.models import Q
 class HomeView(View):
     def get(self,req):
         data={
-            "postBlock":BlogPost.objects.filter(is_draft=True),
+            "postBlock":BlogPost.objects.filter(is_draft=False),
             "category":Category.objects.all(),
         }
         return render(req,"home.html",data)
@@ -79,7 +79,7 @@ class LogoutView(View):
 class DoctorHomeView(View):
     def get(self,req):
         data={
-            # "postBlock":BlogPost.objects.filter(is_draft=True),
+            # "postBlock":BlogPost.objects.filter(is_draft=False),
             "postBlock":BlogPost.objects.all(),
             "category":Category.objects.all(),
         }
@@ -120,7 +120,7 @@ def singleBlock(req,id):
     data={
         "category":Category.objects.all(),
         "post":singlePost,
-        "related_post":BlogPost.objects.filter(~Q(pk=id) & Q(category__id=singlePost.category.id) & Q(is_draft=True))
+        "related_post":BlogPost.objects.filter(~Q(pk=id) & Q(category__id=singlePost.category.id) & Q(is_draft=False))
     }
     return render(req,"Doctor/singleBlock.html",data)
 # @login_required
@@ -131,7 +131,7 @@ def singleBlockPatient(req,id):
     data={
         "category":Category.objects.all(),
         "post":singlePost,
-        "related_post":BlogPost.objects.filter(~Q(pk=id) & Q(category__id=singlePost.category.id) & Q(is_draft=True))
+        "related_post":BlogPost.objects.filter(~Q(pk=id) & Q(category__id=singlePost.category.id) & Q(is_draft=False))
     }
     return render(req,"singleBlock.html",data)
 
@@ -140,7 +140,7 @@ def filterBlock(req,cat_id):
     
     data = {
         "category": Category.objects.all(),
-        "postBlock": BlogPost.objects.filter(Q(category=cat_id) & Q(is_draft=True))
+        "postBlock": BlogPost.objects.filter(Q(category=cat_id) & Q(is_draft=False))
     }
     return render(req, "home.html", data)
 
@@ -148,6 +148,6 @@ def filterBlock(req,cat_id):
 @doctor_required
 def approveBlock(req,id):
     single=BlogPost.objects.get(id=id,is_draft=False)
-    single.is_draft=True
+    single.is_draft=False
     single.save()
     return redirect(singleBlock,id)
