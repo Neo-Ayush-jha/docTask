@@ -123,13 +123,24 @@ def singleBlock(req,id):
         "related_post":BlogPost.objects.filter(~Q(pk=id) & Q(category__id=singlePost.category.id) & Q(is_draft=True))
     }
     return render(req,"Doctor/singleBlock.html",data)
+# @login_required
+# @patient_required
+def singleBlockPatient(req,id):
+    singlePost=get_object_or_404(BlogPost,pk=id)
+    
+    data={
+        "category":Category.objects.all(),
+        "post":singlePost,
+        "related_post":BlogPost.objects.filter(~Q(pk=id) & Q(category__id=singlePost.category.id) & Q(is_draft=True))
+    }
+    return render(req,"singleBlock.html",data)
 
 @login_required
 def filterBlock(req,cat_id):
     
     data = {
         "category": Category.objects.all(),
-        "postBlock": BlogPost.objects.filter(category__id=cat_id)
+        "postBlock": BlogPost.objects.filter(Q(category=cat_id) & Q(is_draft=True))
     }
     return render(req, "home.html", data)
 

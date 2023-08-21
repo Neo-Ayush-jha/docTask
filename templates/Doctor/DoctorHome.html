@@ -20,8 +20,8 @@
                 <div class="col-xl-10 col-sm-12 mx-auto">
                     <div class="row">
                         {% for blo in postBlock %}
-                    <div class="col-4">
-                        <div class="card">
+                        <div class="col-xl-4 col-sm-6 mt-sm-3">
+                            <div class="card">
                             <div class="card">
                                 <img src="{{blo.image.url}}" class="card-img-top" height="250px" alt="...">
                                 <div class="card-body">
@@ -32,7 +32,7 @@
                                       
                                         <p class="card-text text-muted my-0">   <span class="fw-bolder ">Category:</span><span>{{blo.category}}</span></p>
                                     </div>
-                                    <a href="{%url 'singleBlock' blo.id %}" class="btn btn-primary">Go check</a>
+                                    <a href="{%url 'singleBlock' blo.id %}" class="btn btn-primary">Go Detail</a>
                                 </div>
                             </div>
                         </div>

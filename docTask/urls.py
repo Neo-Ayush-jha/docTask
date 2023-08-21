@@ -18,8 +18,8 @@ urlpatterns = [
     path('patient/',patient_blog_list, name='patient_blog_list'),
     path("logout/",LogoutView.as_view(),name="logout"),
     path("view/single/block/<int:id>/",singleBlock,name="singleBlock"),
-    # path("block/post/doctor/post/",blockCreate,name="blockCreate"),
-    path("/filter/<int:cat_id>/",filterBlock,name="filter"),
+    path("view/single/block/public/<int:id>/",singleBlockPatient,name="singleBlockPatient"),
     path("approve/block/<int:id>/",approveBlock,name="is_draft"),
+    path("filter/<int:cat_id>/",filterBlock,name="filter"),
 ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
