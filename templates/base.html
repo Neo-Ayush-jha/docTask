@@ -17,7 +17,11 @@
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
-      <a href="{% url 'home' %}" class="navbar-brand">Task P</a>
+      {% if user.is_doctor == True  %}
+      <a href="{% url 'DoctorHomeView' %}" class="navbar-brand">Task_Doctor</a>
+      {% else %}
+      <a href="{% url 'home' %}" class="navbar-brand">Task_Patient</a>
+      {% endif %}
       <ul class="navbar-nav">
 
         {% if user.is_doctor == True  %}
@@ -28,9 +32,14 @@
 
         {% if user.is_authenticated %}
         <li class="nav-item"><a href="{% url 'logout'%}" class="nav-link">Logout</a></li>
+          
+          {% if user.is_patient == True %}
+          <li class="nav-item"><a href="{% url 'doctor_list'%}" class="nav-link">Appointement</a></li>
 
+          {% endif %}
+            
         {% if user.is_doctor == True  %}
-        <li class="nav-item"><a href="{% url 'blockCreate'%}" class="nav-link">Create bloge</a></li>
+          <li class="nav-item"><a href="{% url 'blockCreate'%}" class="nav-link">Create bloge</a></li>
         {% endif %}
 
         <li class="nav-item"><a href="{% url 'dasboard'%}" class="nav-link">Dasboard</a></li>
@@ -54,6 +63,7 @@
     </div>
   </nav>
   {% block content %}{% endblock content %}
+
 </body>
 
 </html>

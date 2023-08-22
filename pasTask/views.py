@@ -10,6 +10,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from .decorators import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from datetime import datetime, timedelta
 
 class HomeView(View):
     def get(self,req):
@@ -31,7 +32,7 @@ class DoctorDashbordView(View):
         }
         return render(req,"Doctor/doctorDaseboard.html",data)
 class DoctorView(CreateView):
-    model=User
+    model=Doctor
     form_class=DoctorForm
     template_name="Form/singup.html"
     success_url="/doctor/dashbord/"
@@ -43,7 +44,7 @@ class DoctorView(CreateView):
         login(self.request,user)
         return redirect("DoctorDashbordView")
 class PatientView(CreateView):
-    model = User
+    model = Patient
     form_class=PatientForm
     template_name="Form/singup.html"
     success_url="/"
@@ -120,11 +121,11 @@ def singleBlock(req,id):
     data={
         "category":Category.objects.all(),
         "post":singlePost,
-        "related_post":BlogPost.objects.filter(~Q(pk=id) & Q(category__id=singlePost.category.id) & Q(is_draft=False))
+        "related_post":BlogPost.objects.filter(~Q(pk=id) & Q(category__id=singlePost.category.id) )
     }
     return render(req,"Doctor/singleBlock.html",data)
-# @login_required
-# @patient_required
+@login_required
+@patient_required
 def singleBlockPatient(req,id):
     singlePost=get_object_or_404(BlogPost,pk=id)
     
@@ -135,7 +136,7 @@ def singleBlockPatient(req,id):
     }
     return render(req,"singleBlock.html",data)
 
-@login_required
+# @login_required
 def filterBlock(req,cat_id):
     
     data = {
@@ -147,7 +148,48 @@ def filterBlock(req,cat_id):
 @login_required
 @doctor_required
 def approveBlock(req,id):
-    single=BlogPost.objects.get(id=id,is_draft=False)
+    single=BlogPost.objects.get(id=id,is_draft=True)
     single.is_draft=False
     single.save()
     return redirect(singleBlock,id)
+
+
+
+def doctorList(request):
+    doctors = User.objects.filter(is_doctor=True)
+    return render(request, 'doctor_list.html', {'doctors': doctors})
+
+@login_required
+def bookAppointment(request, doctor_id):
+    doctor = Doctor.objects.get(pk=doctor_id)
+    
+    patient = Patient.objects.get(user=request.user)     
+    if request.method == 'POST':
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            appointment = form.save(commit=False)
+            appointment.doctor = doctor
+            appointment.patient_name = patient            
+# -------------------------------------------------->>>>>>Calculate end time
+            start_time = datetime.combine(appointment.appointment_date, appointment.start_time)
+            end_time = start_time + timedelta(minutes=45)
+            appointment.end_time = end_time.time()
+            
+            appointment.save()  
+            Appointment.objects.filter(id=appointment.id).update(end_time=appointment.end_time)
+
+            return redirect(appointmentConfirmation)
+    else:
+        form = AppointmentForm()
+
+    return render(request, 'bookAppointment.html', {'doctor': doctor, 'form': form})
+
+def appointmentConfirmation(request):
+    appointment = Appointment.objects.all() 
+    patient=Patient.objects.get(user=request.user) 
+    data={
+        "appointment":appointment,
+        "patient":patient
+    }  
+    return render(request, 'confirmationAppointment.html', data)
+    

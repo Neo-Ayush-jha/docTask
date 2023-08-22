@@ -33,10 +33,10 @@
                                 <p class="card-text fs-5"><span class="fw-bold">Content :</span>{{post.content}}</p>
                                 
                                 <div class="card-footer">
-                                    {% if post.is_draft == False %}
-                                        <a href="{%url 'is_draft' post.id%}" class="btn btn-danger">Id not draft</a>
+                                    {% if post.is_draft == True %}
+                                        <a href="{%url 'is_draft' post.id%}" class="btn btn-danger">Is draft</a>
                                     {% else %}
-                                        <p class="btn btn-success">Is draft</p></div>
+                                        <p class="btn btn-success">Is not in draft</p></div>
                                     {% endif %}
                             </div>
                         </div>
@@ -59,10 +59,7 @@
                                     <h5 class="card-title">{{blo.title|truncatechars:20}}</h5>
                                     <p class="card-text">{{blo.content|truncatechars:80}}</p>
                                     <div class="card-footer bg-transparent border-success">
-                                        <p class="card-text text-muted my-0">
-                                            <span class="fw-bold">Doctor:</span>
-                                            {{blo.doctor.username}}
-                                        </p>
+                                        
                                         <p class="card-text text-muted my-0">
                                             <span class="fw-bolder">Category:</span><span>{{blo.category}}</span>
                                         </p>

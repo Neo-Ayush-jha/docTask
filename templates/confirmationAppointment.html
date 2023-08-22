@@ -1,0 +1,28 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="container">
+    <div class="row">
+        <h1 class="Display-3 text-center">`<span class="text-danger">{{ patient.first_name }} {{patient.last_name }}</span>` Your Appointment Confirmation</h1>
+        {% for appointments in appointment %}
+
+        {% if appointments.patient_name == patient %}
+        <div class="col-xl-4 col-sm-6 col-md-6 mt-5">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Appointment Confirmation</h5>
+                </div>
+
+                <div class="card-body">
+                    <p class="card-text"><strong>Doctor:</strong> {{ appointments.doctor.first_name }}
+                        {{ appointments.doctor.last_name }}</p>
+                    <p class="card-text"><strong>Appointment Date:</strong> {{ appointments.appointment_date }}</p>
+                    <p class="card-text"><strong>Start Time:</strong> {{ appointments.start_time }}</p>
+                    <p class="card-text"><strong>End Time:</strong> {{ appointments.end_time }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

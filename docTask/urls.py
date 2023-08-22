@@ -21,5 +21,9 @@ urlpatterns = [
     path("view/single/block/public/<int:id>/",singleBlockPatient,name="singleBlockPatient"),
     path("approve/block/<int:id>/",approveBlock,name="is_draft"),
     path("filter/<int:cat_id>/",filterBlock,name="filter"),
+    path('doctors/listing/', doctorList, name='doctor_list'),
+    path('book-appointment/<int:doctor_id>/', bookAppointment, name='book_appointment'),
+    path('appointment-confirmation/', appointmentConfirmation, name='appointment_confirmation'),
+   
 ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

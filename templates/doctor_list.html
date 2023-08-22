@@ -1,0 +1,24 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="container">
+  <div class="row">
+    <h1 class="Display-3 text-center">Doctor List</h1>
+    <p class="border-2 p-3"><a href="{% url 'appointment_confirmation' %}" class="btn btn-success">My privous Confirmation Appointment</a></p>
+    <div class="container">
+        <div class="row">
+            {% for doctor in doctors %}
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <img src="{{ doctor.doctor.profile_Picture.url }}" alt="{{ doctor.name }} profile picture" class="card-img-top" style="height:250px">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ doctor.doctor.first_name }} {{ doctor.doctor.last_name }}</h3>
+                        <a href="{% url 'book_appointment' doctor.id %}" class="btn btn-primary">Book Appointment</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+  </div>
+</div>
+{% endblock content %}
