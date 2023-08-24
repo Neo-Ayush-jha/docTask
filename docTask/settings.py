@@ -40,6 +40,11 @@ INSTALLED_APPS = [
     'pasTask',
     "crispy_forms",
     "crispy_bootstrap5",
+    # 'django.contrib.sites',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [

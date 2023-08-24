@@ -21,9 +21,10 @@
                  <li class="nav-item"><a href="{% url 'logout'%}" class="nav-link">Logout</a></li>
                  <li class="nav-item"><a href="{% url 'blockCreate'%}" class="nav-link">Block</a></li>
                  <li class="nav-item"><a href="{% url 'DoctorDashbordView'%}" class="nav-link">Dasboard</a></li>
-               {% else %}
-               {% if user.is_doctor == True  %}
-               <li class="nav-item"><a href="{% url 'blockCreate'%}" class="nav-link">Create bloge</a></li>
+                 <li class="nav-item"><a href="{% url 'listAppointmentPatient'%}" class="nav-link">List of Appointment</a></li>
+                 {% else %}
+                 {% if user.is_doctor == True  %}
+                 <li class="nav-item"><a href="{% url 'blockCreate'%}" class="nav-link">Create bloge</a></li>
                {% endif %}
                <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-light btn " href="#" role="button" data-bs-toggle="dropdown"

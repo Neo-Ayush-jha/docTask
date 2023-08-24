@@ -1,0 +1,34 @@
+{% extends 'Doctor/doctorBase.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col">
+            <h1 class="mb-4">Patients with Appointments</h1>
+            <h2 class="mb-4">Doctor: {{ doctor.first_name }} {{ doctor.last_name }}</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="row">
+            {% for patient in appointment %}
+            {% if patient.doctor == doctor %}
+            <div class="col-xl-3 col-md-6 col-sm-10 mx-auto">
+                <div class="card mt-2">
+                    <div class="card-body">
+                        <h5 class="card-title">Patient: {{ patient.patient_name.first_name }}
+                            {{ patient.patient_name.last_name }}</h5>
+                        <p class="card-text"><strong>Appointment Date:</strong> {{ patient.appointment_date }}</p>
+                        <p class="card-text"><strong>Start Time:</strong> {{ patient.start_time }} </p>
+                        <p class="card-text"><strong>End Time:</strong> {{ patient.end_time }}</p>
+                        <!-- Add any other relevant patient and appointment details -->
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

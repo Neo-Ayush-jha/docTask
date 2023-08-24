@@ -23,9 +23,10 @@
       <a href="{% url 'home' %}" class="navbar-brand">Task_Patient</a>
       {% endif %}
       <ul class="navbar-nav">
-
+        
         {% if user.is_doctor == True  %}
         <li class="nav-item"><a href="{% url 'DoctorHomeView' %}" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="{% url 'listAppointmentPatient'%}" class="nav-link">List of Appointment</a></li>
         {% else %}
         <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
         {% endif %}

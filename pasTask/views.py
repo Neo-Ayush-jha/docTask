@@ -160,29 +160,61 @@ def doctorList(request):
     return render(request, 'doctor_list.html', {'doctors': doctors})
 
 @login_required
+# def bookAppointment(request, doctor_id):
+#     doctor = Doctor.objects.get(pk=doctor_id)
+    
+#     patient = Patient.objects.get(user=request.user)     
+#     if request.method == 'POST':
+#         form = AppointmentForm(request.POST)
+#         if form.is_valid():
+#             appointment = form.save(commit=False)
+#             appointment.doctor = doctor
+#             appointment.patient_name = patient            
+# # -------------------------------------------------->>>>>>Calculate end time
+#             start_time = datetime.combine(appointment.appointment_date, appointment.start_time)
+#             end_time = start_time + timedelta(minutes=45)
+#             appointment.end_time = end_time.time()
+        
+#             appointment_list=Appointment.objects.all()
+#             if doctor==appointment_list[0].doctor:
+#                 if appointment_list[0].start_time!=appointment.start_time:
+#                     appointment.save()   
+#                     Appointment.objects.filter(id=appointment.id).update(end_time=appointment.end_time)
+#                     return redirect(appointmentConfirmation)
+#                 else:
+#                     msg="You have already an appointment at this date and time"
+#                     return render(request, 'bookAppointment.html', {'doctor': doctor, 'form': form,"msg":msg,"appointment_list":appointment_list})
+#     else:
+#         form = AppointmentForm()
+
+#     return render(request, 'bookAppointment.html', {'doctor': doctor, 'form': form})
 def bookAppointment(request, doctor_id):
     doctor = Doctor.objects.get(pk=doctor_id)
-    
-    patient = Patient.objects.get(user=request.user)     
+    patient = Patient.objects.get(user=request.user)
+
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
             appointment = form.save(commit=False)
             appointment.doctor = doctor
-            appointment.patient_name = patient            
-# -------------------------------------------------->>>>>>Calculate end time
+            appointment.patient_name = patient
             start_time = datetime.combine(appointment.appointment_date, appointment.start_time)
             end_time = start_time + timedelta(minutes=45)
             appointment.end_time = end_time.time()
-            
-            appointment.save()  
-            Appointment.objects.filter(id=appointment.id).update(end_time=appointment.end_time)
-
-            return redirect(appointmentConfirmation)
+            if is_doctor_available(doctor, appointment.appointment_date, appointment.start_time):
+                appointment.save()
+                return redirect(appointmentConfirmation)
+            else:
+                doctor_available = False
+                return render(request, 'bookAppointment.html', {'doctor': doctor, 'form': form, 'doctor_available': doctor_available})
     else:
         form = AppointmentForm()
 
     return render(request, 'bookAppointment.html', {'doctor': doctor, 'form': form})
+
+def is_doctor_available(doctor, appointment_date, start_time):
+    existing_appointments = Appointment.objects.filter(doctor=doctor, appointment_date=appointment_date, start_time=start_time)
+    return not existing_appointments.exists()
 
 def appointmentConfirmation(request):
     appointment = Appointment.objects.all() 
@@ -192,4 +224,13 @@ def appointmentConfirmation(request):
         "patient":patient
     }  
     return render(request, 'confirmationAppointment.html', data)
-    
+
+@login_required
+@doctor_required
+def listAppointmentPatient(req):
+    doctor=Doctor.objects.get(pk=req.user.id)
+    patient=Patient.objects.all()
+    appointment=Appointment.objects.all()
+    # appointment=Appointment.objects.all()
+    data={'doctor': doctor, 'patients': patient,"appointment":appointment}
+    return render(req, 'Doctor/doctorAppointmentList.html', data)
