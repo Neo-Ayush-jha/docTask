@@ -136,7 +136,6 @@ def singleBlockPatient(req,id):
     }
     return render(req,"singleBlock.html",data)
 
-# @login_required
 def filterBlock(req,cat_id):
     
     data = {
@@ -159,35 +158,6 @@ def doctorList(request):
     doctors = User.objects.filter(is_doctor=True)
     return render(request, 'doctor_list.html', {'doctors': doctors})
 
-@login_required
-# def bookAppointment(request, doctor_id):
-#     doctor = Doctor.objects.get(pk=doctor_id)
-    
-#     patient = Patient.objects.get(user=request.user)     
-#     if request.method == 'POST':
-#         form = AppointmentForm(request.POST)
-#         if form.is_valid():
-#             appointment = form.save(commit=False)
-#             appointment.doctor = doctor
-#             appointment.patient_name = patient            
-# # -------------------------------------------------->>>>>>Calculate end time
-#             start_time = datetime.combine(appointment.appointment_date, appointment.start_time)
-#             end_time = start_time + timedelta(minutes=45)
-#             appointment.end_time = end_time.time()
-        
-#             appointment_list=Appointment.objects.all()
-#             if doctor==appointment_list[0].doctor:
-#                 if appointment_list[0].start_time!=appointment.start_time:
-#                     appointment.save()   
-#                     Appointment.objects.filter(id=appointment.id).update(end_time=appointment.end_time)
-#                     return redirect(appointmentConfirmation)
-#                 else:
-#                     msg="You have already an appointment at this date and time"
-#                     return render(request, 'bookAppointment.html', {'doctor': doctor, 'form': form,"msg":msg,"appointment_list":appointment_list})
-#     else:
-#         form = AppointmentForm()
-
-#     return render(request, 'bookAppointment.html', {'doctor': doctor, 'form': form})
 def bookAppointment(request, doctor_id):
     doctor = Doctor.objects.get(pk=doctor_id)
     patient = Patient.objects.get(user=request.user)
@@ -234,3 +204,7 @@ def listAppointmentPatient(req):
     # appointment=Appointment.objects.all()
     data={'doctor': doctor, 'patients': patient,"appointment":appointment}
     return render(req, 'Doctor/doctorAppointmentList.html', data)
+
+def chatPage(request, *args, **kwargs):
+    context = {}
+    return render(request, "chatPage.html", context)

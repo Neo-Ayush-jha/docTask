@@ -25,6 +25,8 @@ urlpatterns = [
     path('book-appointment/<int:doctor_id>/', bookAppointment, name='book_appointment'),
     path('appointment-confirmation/', appointmentConfirmation, name='appointment_confirmation'),
     path('appointment/doctor/list/', listAppointmentPatient, name='listAppointmentPatient'),
+    path("chat/", chatPage, name="chat_page"),
+
 
 ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

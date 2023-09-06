@@ -1,0 +1,45 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="chat__item__container col-8"  >
+            <input type="text" id="id_message_send_input" class="form-control" placeholder="Enter your message">
+        </div>
+        <div class="col-4">
+            <button type="button" id="id_message_send_button" class="btn btn-primary ">Send Message</button>
+        </div>
+        <div class="col-10 fs-3 mx-auto mt-5 chat" id="id_chat_item_container" style="height: 60vh;background-color:#363535;color:aliceblue;"></div>
+    </div>
+</div>
+<script>
+    const chatSocket = new WebSocket("ws://" + window.location.host + "/");
+    chatSocket.onopen = function (e) {
+        console.log("The connection was set up successfully !");
+    };
+    chatSocket.onclose = function (e) {
+        console.log("Something unexpected happened !");
+    };
+    document.querySelector("#id_message_send_input").focus();
+    document.querySelector("#id_message_send_input").addEventListener("keyup", function (e) {
+        if (e.keyCode === 13) {
+            document.querySelector("#id_message_send_button").click();
+        }
+    });
+    document.querySelector("#id_message_send_button").addEventListener("click", function (e) {
+        var messageInput = document.querySelector("#id_message_send_input").value;
+        chatSocket.send(
+            JSON.stringify({
+                message: messageInput,
+                username: "{{request.user.username}}",
+            })
+        );
+    });
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        var div = document.createElement("div");
+        div.textContent =  data.username + " : " + data.message;
+        document.querySelector("#id_message_send_input").value = "";
+        document.querySelector("#id_chat_item_container").appendChild(div);
+    };
+</script>
+
+{% endblock content %}

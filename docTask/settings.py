@@ -36,8 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'daphne' ,
     'django.contrib.staticfiles',
     'pasTask',
+    'channels' ,
     "crispy_forms",
     "crispy_bootstrap5",
     # 'django.contrib.sites',
@@ -45,8 +47,16 @@ INSTALLED_APPS = [
     # 'allauth.account',
     # 'allauth.socialaccount',
     # 'allauth.socialaccount.providers.google',
-]
 
+]
+ASGI_APPLICATION = 'docTask.asgi.application'
+ROOT_URLCONF = 'docTask.urls'
+AUTH_USER_MODEL="pasTask.User"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -56,9 +66,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-ROOT_URLCONF = 'docTask.urls'
-AUTH_USER_MODEL="pasTask.User"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
